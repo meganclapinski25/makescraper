@@ -24,10 +24,15 @@ func main() {
 	c.OnHTML("tr.athing", func(e *colly.HTMLElement) {
 		title := e.ChildText("span.titleline > a, a.storylink")
 		url   := e.ChildAttr("span.titleline > a, a.storylink", "href")
-                
+        
+		meta := e.DOM.Next()
 
+		author := meta.Find("td.subtext a.hnuser").Text()
+		age    := meta.Find("td.subtext span.age > a").Text()
+		points := meta.Find("td.subtext span.score").Text()
 		// Print link
-		fmt.Printf("%s\n%s\n\n", title, url)
+		fmt.Printf("Title: %s\nURL: %s\nAuthor: %s\n\n", title, url, author)
+
 	})
 
 	// Before making a request print "Visiting ..."

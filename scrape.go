@@ -31,7 +31,7 @@ func main() {
 		age    := meta.Find("td.subtext span.age > a").Text()
 		points := meta.Find("td.subtext span.score").Text()
 		// Print link
-		fmt.Printf("Title: %s\nURL: %s\nAuthor: %s\n\n", title, url, author)
+		fmt.Printf( title, url, author, age, points)
 
 	})
 

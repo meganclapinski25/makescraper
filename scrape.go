@@ -21,6 +21,8 @@ func main() {
 	// Instantiate default collector
 	c := colly.NewCollector()
 
+// create a slice for json 
+	stories := make([]Story, 0, 64)
 	// On every a element which has href attribute call callback
 	c.OnHTML("tr.athing", func(e *colly.HTMLElement) {
 		id := e.Attr("id")
@@ -37,6 +39,15 @@ func main() {
 			"Title: %s\nURL: %s\nAuthor: %s\nAge: %s\nPoints: %s\nID: %s\n\n",
 			title, url, author, age, points, id,
 		)
+
+		// adding struct to slice for json
+		stories = append(stories, Story{
+			Title:  title,
+			Author: author,
+			Age:    age,
+			Points: pts,
+			Url:    url,
+		})
 	})
 
 	// Before making a request print "Visiting ..."
@@ -46,4 +57,8 @@ func main() {
 
 	// Start scraping on https://hackerspaces.org
 	c.Visit("https://news.ycombinator.com/")
+
+	b, _ := json.MarshalIndent(stories, "", "  ") // pretty JSON
+	fmt.Println(string(b))                        // print to stdout
+	_ = os.WriteFile("output.json", b, 0644)  
 }

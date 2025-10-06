@@ -34,6 +34,11 @@ func main() {
 		author := meta.Find("td.subtext a.hnuser").Text()
 		age    := meta.Find("td.subtext span.age > a").Text()
 		points := meta.Find("td.subtext span.score").Text()
+		
+		// create another var for points to store as int
+		var pts int 
+		fmt.Sscanf(points, "%d", &pts)
+		
 		// Print link
 		fmt.Printf(
 			"Title: %s\nURL: %s\nAuthor: %s\nAge: %s\nPoints: %s\nID: %s\n\n",

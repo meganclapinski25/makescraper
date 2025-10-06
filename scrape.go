@@ -6,6 +6,14 @@ import (
 	"github.com/gocolly/colly"
 )
 
+type Story struct{
+	Title string `json:"title"`
+	Author string `json:"author"`
+	Age string `json:"age"`
+	Points int `json:"points"`
+	Url string `json:"url"`
+}
+
 // main() contains code adapted from example found in Colly's docs:
 // http://go-colly.org/docs/examples/basic/
 func main() {
@@ -13,11 +21,13 @@ func main() {
 	c := colly.NewCollector()
 
 	// On every a element which has href attribute call callback
-	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
-                link := e.Attr("href")
+	c.OnHTML("tr.athing", func(e *colly.HTMLElement) {
+		title := e.ChildText("span.titleline > a, a.storylink")
+		url   := e.ChildAttr("span.titleline > a, a.storylink", "href")
+                
 
 		// Print link
-                fmt.Printf("Link found: %q -> %s\n", e.Text, link)
+		fmt.Printf("%s\n%s\n\n", title, url)
 	})
 
 	// Before making a request print "Visiting ..."
@@ -26,5 +36,5 @@ func main() {
 	})
 
 	// Start scraping on https://hackerspaces.org
-	c.Visit("https://hackerspaces.org/")
+	c.Visit("https://news.ycombinator.com/")
 }

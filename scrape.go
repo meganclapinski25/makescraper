@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-
+	"encoding/json"
 	"github.com/gocolly/colly"
+	"os"
 )
 
 type Story struct{
@@ -22,6 +23,7 @@ func main() {
 
 	// On every a element which has href attribute call callback
 	c.OnHTML("tr.athing", func(e *colly.HTMLElement) {
+		id := e.Attr("id")
 		title := e.ChildText("span.titleline > a, a.storylink")
 		url   := e.ChildAttr("span.titleline > a, a.storylink", "href")
         
@@ -31,8 +33,10 @@ func main() {
 		age    := meta.Find("td.subtext span.age > a").Text()
 		points := meta.Find("td.subtext span.score").Text()
 		// Print link
-		fmt.Printf( title, url, author, age, points)
-
+		fmt.Printf(
+			"Title: %s\nURL: %s\nAuthor: %s\nAge: %s\nPoints: %s\nID: %s\n\n",
+			title, url, author, age, points, id,
+		)
 	})
 
 	// Before making a request print "Visiting ..."
